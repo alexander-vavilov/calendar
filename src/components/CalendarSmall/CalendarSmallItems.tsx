@@ -27,9 +27,9 @@ const CalendarSmallItems: FC<ICalendarSmallItems> = ({
     return (
       <CalendarSmallItem
         key={date.toISOString()}
-        dateValue={dateValue}
-        handleClick={() => setSelectedDate(date)}
+        date={date}
         selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
         dayTasks={dayTasks}
         isOffsetDay={isOffsetDay}
       />

@@ -10,6 +10,7 @@ import CalendarHeader from './CalendarHeader'
 import clsx from 'clsx'
 import { ModalContext } from '../contexts/ModalContext'
 import TaskFormModalContent from './TaskFormModalContent'
+import CalendarNumber from './CalendarNumber'
 
 const CalendarMonth: FC = () => {
   const { selectedDate, tasks } = useContext(
@@ -41,9 +42,7 @@ const CalendarMonth: FC = () => {
         <div className='grid h-full grid-cols-7'>
           {days.map((dateValue) => {
             const date = new Date(dateValue)
-            const day = date.toLocaleString('default', {
-              day: '2-digit'
-            })
+
             const dayTasks = tasks.filter((task) => isSameDay(task.date, date))
 
             const middleMonthDay = days[Math.round(days.length / 2)]
@@ -66,7 +65,7 @@ const CalendarMonth: FC = () => {
                     isOffsetDay && 'opacity-60'
                   )}
                 >
-                  <span className='inline-block select-none p-2'>{day}</span>
+                  <CalendarNumber date={date} isOffsetDay={isOffsetDay} />
                   <Tasks items={dayTasks} variant='base' />
                 </Cell>
               </Droppable>
