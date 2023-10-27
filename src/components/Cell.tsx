@@ -1,18 +1,17 @@
-import clsx from 'clsx'
 import { FC, ReactNode } from 'react'
+import clsx from 'clsx'
 
-interface ICell {
-	children?: ReactNode
-	className?: string
-	onClick?: () => void
+interface ICell extends React.ComponentPropsWithoutRef<'div'> {
+  children?: ReactNode
+  className?: string
 }
 
-const Cell: FC<ICell> = ({ children, className, onClick }) => {
-	return (
-		<div onClick={onClick} className={clsx('text-sm font-medium', className)}>
-			{children}
-		</div>
-	)
+const Cell: FC<ICell> = ({ children, className, ...props }) => {
+  return (
+    <div className={clsx('text-sm font-medium', className)} {...props}>
+      {children}
+    </div>
+  )
 }
 
 export default Cell

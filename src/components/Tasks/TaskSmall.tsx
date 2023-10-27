@@ -1,7 +1,13 @@
 import { FC } from 'react'
+import { hexColorType } from '../../types'
 
-const TaskSmall: FC = () => {
-	return <div className='w-3 h-3 bg-red-500 rounded-full' />
+const TaskSmall: FC<{ color: hexColorType }> = ({ color }) => {
+  return (
+    <div
+      className='h-[5px] w-[5px] rounded-full shadow-md'
+      style={{ background: color }}
+    />
+  )
 }
 
 export default TaskSmall

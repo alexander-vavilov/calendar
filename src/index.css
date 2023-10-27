@@ -3,9 +3,18 @@
 @tailwind utilities;
 
 body {
-	@apply overflow-hidden;
+  @apply overflow-hidden;
 }
 input,
 textarea {
-	@apply outline-none;
+  @apply outline-none;
+}
+
+@layer components {
+  .task {
+    @apply flex flex-auto flex-col rounded-md text-white shadow-md;
+  }
+  .calendar-header {
+    @apply border-b-2 border-gray-200/70 py-4;
+  }
 }

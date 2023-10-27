@@ -1,43 +1,45 @@
 import { FC, useState } from 'react'
-import Cell from '../Cell'
-import CalendarSmallHeader from './CalendarSmallHeader'
-import WeekDays from '../WeekDays'
+import CalendarSmallHeading from './CalendarSmallHeading'
 import CalendarSmallItems from './CalendarSmallItems'
-import { getDays, getPrefixDaysCount } from '../../utils'
+import { getDays, getPostfixDays, getPrefixDays } from '../../utils/calendar'
+import CalendarHeader from '../CalendarHeader'
 
 interface ICalendarSmall {
-	selectedDate: Date
-	setSelectedDate: React.Dispatch<React.SetStateAction<Date>>
+  selectedDate: Date
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>
 }
 
 const CalendarSmall: FC<ICalendarSmall> = ({
-	selectedDate,
-	setSelectedDate,
+  selectedDate,
+  setSelectedDate
 }) => {
-	const [calendarSelectedDate, setCalendarSelectedDate] = useState(selectedDate)
+  const [calendarSelectedDate, setCalendarSelectedDate] = useState(selectedDate)
 
-	const days = getDays(calendarSelectedDate, 'month')
-	const prefixDaysCount = getPrefixDaysCount(calendarSelectedDate)
+  const monthDays = getDays(calendarSelectedDate, 'month')
+  const prefixDays = getPrefixDays(calendarSelectedDate)
+  const postfixDays = getPostfixDays(calendarSelectedDate)
 
-	return (
-		<div>
-			<CalendarSmallHeader
-				date={calendarSelectedDate}
-				setDate={setCalendarSelectedDate}
-			/>
-			<div className='grid grid-cols-7 gap-2 pl-4'>
-				<WeekDays />
-				{Array.from({ length: prefixDaysCount }).map((_, index) => (
-					<Cell key={index} />
-				))}
-				<CalendarSmallItems
-					days={days}
-					selectedDate={selectedDate}
-					setSelectedDate={setSelectedDate}
-				/>
-			</div>
-		</div>
-	)
+  return (
+    <div>
+      <CalendarSmallHeading
+        date={calendarSelectedDate}
+        setDate={setCalendarSelectedDate}
+      />
+      <div className='pl-4'>
+        <CalendarHeader
+          display={{ day: false, dayAbbreviation: true }}
+          className='text-sm'
+        />
+        <div className='grid grid-cols-7 gap-2'>
+          <CalendarSmallItems
+            days={[...prefixDays, ...monthDays, ...postfixDays]}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+          />
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default CalendarSmall

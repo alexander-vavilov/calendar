@@ -1,43 +1,40 @@
-import { isSameDay } from 'date-fns'
+import { isSameDay, isSameMonth } from 'date-fns'
 import { FC, useContext } from 'react'
 import CalendarSmallItem from './CalendarSmallItem'
 import { CalendarContext } from '../../contexts/CalendarContext'
 import { CalendarContextType } from '../../types'
 
 interface ICalendarSmallItems {
-	days: Date[]
-	selectedDate: Date
-	setSelectedDate: React.Dispatch<React.SetStateAction<Date>>
+  days: Date[]
+  selectedDate: Date
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>
 }
 
 const CalendarSmallItems: FC<ICalendarSmallItems> = ({
-	days,
-	selectedDate,
-	setSelectedDate,
+  days,
+  selectedDate,
+  setSelectedDate
 }) => {
-	const currentDate = new Date()
-	const { tasks } = useContext(CalendarContext) as CalendarContextType
+  const { tasks } = useContext(CalendarContext) as CalendarContextType
 
-	return days.map(dateValue => {
-		const date = new Date(dateValue)
-		const day = date.toLocaleString('default', {
-			day: '2-digit',
-		})
-		const dayTasks = tasks.filter(task => isSameDay(task.date, date))
+  return days.map((dateValue) => {
+    const date = new Date(dateValue)
+    const dayTasks = tasks.filter((task) => isSameDay(task.date, date))
 
-		const isSelectedDate = isSameDay(selectedDate, date)
-		const isCurrentDay = isSameDay(currentDate, dateValue)
+    const middleMonthDay = days[Math.round(days.length / 2)]
+    const isOffsetDay = !isSameMonth(middleMonthDay, date)
 
-		return (
-			<CalendarSmallItem
-				handleClick={() => setSelectedDate(date)}
-				isSelectedDate={isSelectedDate}
-				isCurrentDay={isCurrentDay}
-				label={day}
-				dayTasks={dayTasks}
-			/>
-		)
-	})
+    return (
+      <CalendarSmallItem
+        key={date.toISOString()}
+        dateValue={dateValue}
+        handleClick={() => setSelectedDate(date)}
+        selectedDate={selectedDate}
+        dayTasks={dayTasks}
+        isOffsetDay={isOffsetDay}
+      />
+    )
+  })
 }
 
 export default CalendarSmallItems

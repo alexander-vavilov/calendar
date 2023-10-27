@@ -1,15 +1,19 @@
-import clsx from 'clsx'
 import { FC } from 'react'
 import { TaskVariantType, hexColorType } from '../../types'
+import Draggable from '../Draggable'
+import TaskSmall from './TaskSmall'
+import TaskBase from './TaskBase'
+import TaskLarge from './TaskLarge'
 
 interface ITask {
 	name: string
 	date: Date
+	id: string
 	variant?: TaskVariantType
 	color: hexColorType
 }
 
-const Task: FC<ITask> = ({ name, date, variant = 'base', color }) => {
+const Task: FC<ITask> = ({ name, date, id, variant = 'base', color }) => {
 	const dateString = date.toLocaleString('default', {
 		day: '2-digit',
 		month: 'short',
@@ -17,26 +21,21 @@ const Task: FC<ITask> = ({ name, date, variant = 'base', color }) => {
 		minute: '2-digit',
 	})
 
+	const renderSwitch = () => {
+		switch (variant) {
+			case 'small':
+				return <TaskSmall color={color} />
+			case 'base':
+				return <TaskBase color={color} name={name} />
+			case 'large':
+				return <TaskLarge color={color} name={name} dateString={dateString} />
+		}
+	}
+
 	return (
-		<div
-			className={clsx(
-				'flex flex-col text-white rounded-md',
-				variant === 'large' ? 'p-3' : variant === 'base' ? 'p-1' : 'w-1 h-1'
-			)}
-			style={{ background: color }}
-		>
-			{variant !== 'small' && (
-				<span
-					className={clsx(
-						'font-normal',
-						variant === 'large' ? 'text-base leading-4' : 'text-sm leading-none'
-					)}
-				>
-					{name}
-				</span>
-			)}
-			{variant === 'large' && <span className='font-normal'>{dateString}</span>}
-		</div>
+		<Draggable id={id} data={{ date }}>
+			{renderSwitch()}
+		</Draggable>
 	)
 }
 
